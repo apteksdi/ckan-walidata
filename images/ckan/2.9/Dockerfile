@@ -1,14 +1,21 @@
 ##################
 ### Build CKAN ###
 ##################
-FROM alpine:3.14.2 as ckanbuild
+FROM ubuntu:focal-20210827 as ckanbuild
 
 # Used by Github Actions to tag the image with
-ENV IMAGE_TAG=2.9.4
+ENV IMAGE_TAG=2.9.4-focal
 
 # Set CKAN version to build
 ENV GIT_URL=https://github.com/ckan/ckan.git
 ENV GIT_BRANCH=ckan-2.9.4
+
+# Set timezone
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Set Locale
+ENV LC_ALL=en_US.UTF-8
 
 # Set src dirs
 ENV SRC_DIR=/srv/app/src
@@ -16,29 +23,41 @@ ENV PIP_SRC=${SRC_DIR}
 
 WORKDIR ${SRC_DIR}
 
+# Set the locale          
+RUN apt-get update
+RUN apt-get install --no-install-recommends -y locales
+RUN sed -i "/$LC_ALL/s/^# //g" /etc/locale.gen
+RUN dpkg-reconfigure --frontend=noninteractive locales 
+RUN update-locale LANG=${LC_ALL}
+
+# Instal apt-utils
+RUN apt-get install --no-install-recommends -y \
+        apt-utils
+
 # Packages to build CKAN requirements and plugins
-# Make sure we install python 3.8, cause CKAN is not compatible with 3.9
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/main \
-        python3=3.8.10-r0 \
-        python3-dev=3.8.10-r0 && \
-    apk add --no-cache \
+RUN apt-get install --no-install-recommends -y \
         git \
         curl \
-        postgresql-dev \
-        linux-headers \
-        gcc \
-        make \
-        g++ \
-        autoconf \
-        automake \
-        libtool \
+        ca-certificates \
+        python3 \
+        libpq-dev \
+        linux-headers-generic \
+	    gcc-10 \
+	    make \
+	    g++-10 \
+	    autoconf \
+	    automake \
+	    libtool \
         patch \
-        musl-dev \
-        pcre-dev \
-        pcre \
+        libpcre3-dev \
+        libpcre3 \
+        python3-dev \
         libffi-dev \
         libxml2-dev \
         libxslt-dev
+
+# Use gcc 10
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10 --slave /usr/bin/gcov gcov /usr/bin/gcov-10 --slave /usr/bin/x86_64-linux-gnu-gcc x86_64-linux-gnu-gcc /usr/bin/x86_64-linux-gnu-gcc-10
 
 # Link python to python3
 RUN ln -s /usr/bin/python3 /usr/bin/python
@@ -68,7 +87,7 @@ RUN pip wheel --wheel-dir=/wheels uwsgi==2.0.19.1 gevent==21.1.2 greenlet==1.1.0
 ###########################
 ### Default-Extensions ####
 ###########################
-FROM alpine:3.14.2 as extbuild
+FROM ubuntu:focal-20210827 as extbuild
 
 # Set src dirs
 ENV SRC_DIR=/srv/app/src
@@ -81,13 +100,13 @@ ENV DEFAULT_EXTENSIONS envvars
 ENV ENVVARS_GIT_URL=https://github.com/okfn/ckanext-envvars
 ENV ENVVARS_GIT_BRANCH=0.0.1
 
-# Make sure we install python 3.8, cause CKAN is not compatible with 3.9
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/main \
-        python3=3.8.10-r0 \
-        python3-dev=3.8.10-r0 && \
-    apk add --no-cache \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
         git \
-        curl 
+        curl \
+        ca-certificates \
+        python3 \
+        python3-dev
 
 # Link python to python3
 RUN ln -s /usr/bin/python3 /usr/bin/python
@@ -105,10 +124,25 @@ RUN pip wheel --wheel-dir=/wheels git+${ENVVARS_GIT_URL}@${ENVVARS_GIT_BRANCH}#e
 ############
 ### MAIN ###
 ############
-FROM alpine:3.14.2
+FROM ubuntu:focal-20210827
 
-LABEL maintainer="Keitaro Inc <info@keitaro.com>"
-LABEL org.opencontainers.image.source https://github.com/keitaroinc/docker-ckan
+LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
+LABEL org.opencontainers.image.source https://github.com/apteksdi/ckan-walidata
+
+# Set timezone
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Set Locale
+ENV LC_ALL=en_US.UTF-8
+
+# Set the locale          
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y locales && \
+    sed -i "/$LC_ALL/s/^# //g" /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=${LC_ALL} && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV APP_DIR=/srv/app
 ENV SRC_DIR=/srv/app/src
@@ -119,20 +153,24 @@ ENV CKAN_SITE_URL=http://localhost:5000
 ENV CKAN__PLUGINS envvars image_view text_view recline_view datastore datapusher
 
 # Install necessary packages to run CKAN
-# Make sure we install python 3.8, cause CKAN is not compatible with 3.9
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/main \
-        python3=3.8.10-r0 && \
-    apk add --no-cache git \
-        bash \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
         gettext \
-        curl \
-        postgresql-client \
-        libmagic \
-        pcre \
-        libxslt \
+	curl \
+        ca-certificates \
+        libpq5 \
+        git \
+	postgresql-client \
+        python3 \
+	python3-distutils \
+	libpython3.8 \
+        libmagic1 \
+        libpcre3 \
+        libxslt1.1 \
         libxml2 \
         tzdata \
         apache2-utils && \
+    rm -rf /var/lib/apt/lists/* && \
     # Create SRC_DIR
     mkdir -p ${SRC_DIR} && \
     # Link python to python3
@@ -151,8 +189,8 @@ COPY --from=ckanbuild /srv/app/src/ckan ${CKAN_DIR}
 RUN pip install --no-index --find-links=/srv/app/wheels uwsgi==2.0.19.1 gevent==21.1.2
 
 # Create a local user and group to run the app
-RUN addgroup -g 92 -S ckan && \
-    adduser -u 92 -h /srv/app -H -D -S -G ckan ckan
+RUN groupadd -g 92 ckan && \
+    useradd -rm -d /srv/app -s /bin/bash -g ckan -u 92 ckan
 
 WORKDIR ${CKAN_DIR}
 
@@ -163,8 +201,6 @@ RUN pip install -e /srv/app/src/ckan && \
     # Install default CKAN extensions
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-envvars && \
     # Create and update CKAN config
-    # Set timezone
-    echo "UTC" >  /etc/timezone && \
     # Generate CKAN config
     ckan generate config ${APP_DIR}/production.ini && \
     # Configure plugins

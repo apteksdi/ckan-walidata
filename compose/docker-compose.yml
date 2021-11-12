@@ -9,7 +9,8 @@ volumes:
 services:
   ckan:
     container_name: ckan
-    image: ghcr.io/keitaroinc/ckan:${CKAN_VERSION}
+    build:
+      context: .
     networks:
       - frontend
       - backend
@@ -34,7 +35,7 @@ services:
 
   datapusher:
     container_name: datapusher
-    image: ghcr.io/keitaroinc/datapusher:${DATAPUSHER_VERSION}
+    image: ghcr.io/apteksdi/datapusher:0.0.17
     networks:
       - frontend
       - backend
@@ -48,7 +49,6 @@ services:
       - DATAPUSHER_SSL_VERIFY=${DATA_PUSHER_SSL_VERIFY}
       - DATAPUSHER_REWRITE_RESOURCES=${DATAPUSHER_REWRITE_RESOURCES}
       - DATAPUSHER_REWRITE_URL=${DATAPUSHER_REWRITE_URL}
-
 
   db:
     container_name: db
