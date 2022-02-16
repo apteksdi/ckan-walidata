@@ -32,6 +32,10 @@ CKAN_SMTP_MAIL_FROM=ckan@localhost
 CKAN__DATAPUSHER__URL=http://datapusher:8000
 CKAN__DATAPUSHER__CALLBACK_URL_BASE=http://ckan:5000/
 
+# Solr configuration
+CKAN_VERSION=2.9.5
+CKAN_CORE_NAME=ckan
+
 # Pages
 CKAN__PAGES__ALLOW_HTML=True
 CKAN__PAGES__EDITOR=ckeditor
