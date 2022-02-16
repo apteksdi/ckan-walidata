@@ -129,8 +129,8 @@ RUN pip wheel --wheel-dir=/wheels git+${ENVVARS_GIT_URL}@${ENVVARS_GIT_BRANCH}#e
 ############
 FROM ubuntu:focal-20210827
 
-LABEL maintainer="Keitaro Inc <info@keitaro.com>"
-LABEL org.opencontainers.image.source https://github.com/keitaroinc/docker-ckan
+LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
+LABEL org.opencontainers.image.source https://github.com/apteksdi/ckan-walidata
 
 # Set timezone
 ENV TZ=UTC
