@@ -1,7 +1,7 @@
 ###################
 ### Extensions ####
 ###################
-FROM ghcr.io/apteksdi/ckan:2.9.4-focal as extbuild
+FROM ghcr.io/apteksdi/ckan:2.9.5-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 
@@ -50,7 +50,7 @@ USER ckan
 ############
 ### MAIN ###
 ############
-FROM ghcr.io/apteksdi/ckan:2.9.4-focal
+FROM ghcr.io/apteksdi/ckan:2.9.5-focal
 
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
