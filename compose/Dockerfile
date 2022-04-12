@@ -32,8 +32,6 @@ ENV RESOURCEDICTIONARY_GIT_URL=https://github.com/keitaroinc/ckanext-resourcedic
 ENV RESOURCEDICTIONARY_GIT_BRANCH=main
 ENV OAIPMH_GIT_URL=https://github.com/apteksdi/ckanext-oaipmh.git
 ENV OAIPMH_GIT_BRANCH=master
-#ENV OAUTH2_GIT_URL=https://github.com/htagTsc/ckanext-oauth2.git
-#ENV OAUTH2_GIT_BRANCH=master
 
 # Switch to the root user
 USER root
