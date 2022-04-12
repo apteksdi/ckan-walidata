@@ -11,7 +11,7 @@ CKAN_SITE_URL=http://localhost:5000
 CKAN_PORT=5000
 CKAN_MAX_UPLOAD_SIZE_MB=10
 # CKAN Plugins
-CKAN__PLUGINS=envvars stats image_view text_view recline_view resource_proxy pdf_view resourcedictionary datastore datapusher pages officedocs_view datatables_view 
+CKAN__PLUGINS=envvars stats image_view text_view recline_view resource_proxy sdi geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query scheming_datasets create_typed_package pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view resourcedictionary datastore datapusher pages showcase waf_harvester doc_harvester dcat datajson_harvest dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
 
 # CKAN requires storage path to be set in order for filestore to be enabled
 CKAN__STORAGE_PATH=/srv/app/data
@@ -36,6 +36,27 @@ CKAN__DATAPUSHER__CALLBACK_URL_BASE=http://ckan:5000/
 CKAN_VERSION=2.9.5
 CKAN_CORE_NAME=ckan
 
+# Harvest settings
+CKAN__HARVEST__MQ__TYPE=redis
+CKAN__HARVEST__MQ__HOSTNAME=redis
+
 # Pages
 CKAN__PAGES__ALLOW_HTML=True
 CKAN__PAGES__EDITOR=ckeditor
+
+# Showcase
+CKAN__SHOWCASE__EDITOR=ckeditor
+
+# Auth
+CKAN__AUTH__CREATE_USER_VIA_API=False
+CKAN__AUTH__CREATE_USER_VIA_web=False
+CKAN__AUTH__PUBLIC_USER_DETAILS=False
+CKAN__AUTH__PUBLIC_ACTIVITY_STREAM_DETAIL=False
+
+# Spatial
+CKANEXT__SPATIAL__SEARCH_BACKEND=solr
+CKANEXT__SPATIAL__HARVEST__CONTINUE_ON_VALIDATION_ERRORS=true
+CKANEXT__SPATIAL__COMMON_MAP__TYPE=custom
+CKANEXT__SPATIAL__COMMON_MAP__CUSTOM__URL=https://geoservices.big.go.id/rbi/rest/services/BASEMAP/Rupabumi_Indonesia/MapServer/WMTS/tile/1.0.0/BASEMAP_Rupabumi_Indonesia/default/default028mm/{z}/{y}/{x}.png
+CKANEXT__SPATIAL__COMMON_MAP__ATTRIBUTION=Map tiles by <a href="https://www.big.go.id">Badan Informasi Geospasial</a>.
+CKANEXT__GEOVIEW__OL_VIEWER__FORMATS=wms wfs geojson gml kml arcgis_rest gft
