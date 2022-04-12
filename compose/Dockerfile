@@ -120,8 +120,7 @@ FROM ghcr.io/keitaroinc/ckan:2.9.5-focal
 
 LABEL maintainer="Keitaro Inc <info@keitaro.com>"
 
-#ENV CKAN_ROOT_PATH /data/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy saml2auth sdi geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query scheming_datasets create_typed_package pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view resourcedictionary datastore datapusher pages showcase waf_harvester doc_harvester dcat datajson_harvest dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
+ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy sdi geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query scheming_datasets create_typed_package pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view resourcedictionary datastore datapusher pages showcase waf_harvester doc_harvester dcat datajson_harvest dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
 ENV CKANEXT__PAGES__ALLOW_HTML True
 ENV CKANEXT__PAGES__EDITOR ckeditor
 ENV CKANEXT__SHOWCASE__EDITOR ckeditor
