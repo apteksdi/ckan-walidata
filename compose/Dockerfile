@@ -200,7 +200,7 @@ RUN pip install auth && \
 RUN rm -rf /srv/app/ext_wheels
 
 # Add harvest afterinit script
-COPY ./afterinit.d/00_harvest.sh ${APP_DIR}/docker-afterinit.d/00_harvest.sh
+COPY ./00_harvest.sh ${APP_DIR}/docker-afterinit.d/00_harvest.sh
 
 # Switch to the ckan user
 USER ckan
