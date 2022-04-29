@@ -27,6 +27,7 @@ schema. In this case the version should be set to the next CKAN version number.
 <schema name="ckan" version="2.9">
 
 <types>
+    <field name="topic" type="string" indexed="true" stored="true" multiValued="true"/>
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
     <fieldtype name="binary" class="solr.BinaryField"/>
