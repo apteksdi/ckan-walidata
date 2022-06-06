@@ -5,7 +5,7 @@ FROM ghcr.io/apteksdi/ckan:2.9.5-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
-ENV HARVEST_GIT_BRANCH=v1.3.4
+ENV HARVEST_GIT_BRANCH=v1.3.3
 ENV SPATIAL_GIT_URL=https://github.com/ckan/ckanext-spatial.git
 ENV SPATIAL_GIT_BRANCH=master
 ENV GEOVIEW_GIT_URL=https://github.com/ckan/ckanext-geoview.git
