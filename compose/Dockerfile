@@ -14,6 +14,8 @@ ENV PAGES_GIT_URL=https://github.com/ckan/ckanext-pages.git
 ENV PAGES_GIT_BRANCH=master
 ENV SHOWCASE_GIT_URL=https://github.com/ckan/ckanext-showcase.git
 ENV SHOWCASE_GIT_BRANCH=master
+ENV OFFICEDOCS_GIT_URL=https://github.com/apteksdi/ckanext-officedocs.git
+ENV OFFICEDOCS_GIT_BRANCH=master
 ENV DCAT_GIT_URL=https://github.com/apteksdi/ckanext-dcat.git
 ENV DCAT_GIT_BRANCH=master
 ENV SCHEMING_GIT_URL=https://github.com/apteksdi/ckanext-scheming.git
@@ -65,6 +67,10 @@ RUN pip wheel --wheel-dir=/wheels git+${SHOWCASE_GIT_URL}@${SHOWCASE_GIT_BRANCH}
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-showcase/${SHOWCASE_GIT_BRANCH}/requirements.txt
 RUN curl -o /wheels/showcase.txt https://raw.githubusercontent.com/ckan/ckanext-showcase/${SHOWCASE_GIT_BRANCH}/requirements.txt
 
+RUN pip wheel --wheel-dir=/wheels git+${OFFICEDOCS_GIT_URL}@${OFFICEDOCS_GIT_BRANCH}#egg=ckanext-officedocs
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-officedocs/${OFFICEDOCS_GIT_BRANCH}/requirements.txt
+RUN curl -o /wheels/officedocs.txt https://raw.githubusercontent.com/apteksdi/ckanext-officedocs/${OFFICEDOCS_GIT_BRANCH}/requirements.txt
+
 RUN pip wheel --wheel-dir=/wheels git+${DCAT_GIT_URL}@${DCAT_GIT_BRANCH}#egg=ckanext-dcat
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-dcat/${DCAT_GIT_BRANCH}/requirements.txt
 RUN curl -o /wheels/dcat.txt https://raw.githubusercontent.com/apteksdi/ckanext-dcat/${DCAT_GIT_BRANCH}/requirements.txt
@@ -91,7 +97,7 @@ FROM ghcr.io/apteksdi/ckan:2.9.5-focal
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
 #ENV CKAN_ROOT_PATH /data/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query datastore datapusher pages showcase scheming_datasets pdf_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
+ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query datastore datapusher pages showcase scheming_datasets pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
 ENV CKAN__AUTH__CREATE_USER_VIA_API false
 ENV CKAN__AUTH__CREATE_USER_VIA_web false
 ENV CKAN__AUTH__PUBLIC_USER_DETAILS false
@@ -132,6 +138,8 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/pages.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-showcase && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/showcase.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-officedocs && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/officedocs.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-sdi && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/sdi.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-scheming && \
