@@ -5,7 +5,7 @@ FROM ghcr.io/apteksdi/ckan:2.9.5-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
-ENV HARVEST_GIT_BRANCH=v1.3.3
+ENV HARVEST_GIT_BRANCH=v1.3.4
 ENV SPATIAL_GIT_URL=https://github.com/ckan/ckanext-spatial.git
 ENV SPATIAL_GIT_BRANCH=master
 ENV GEOVIEW_GIT_URL=https://github.com/ckan/ckanext-geoview.git
@@ -22,8 +22,6 @@ ENV SCHEMING_GIT_URL=https://github.com/apteksdi/ckanext-scheming.git
 ENV SCHEMING_GIT_BRANCH=master
 ENV SDI_GIT_URL=https://github.com/apteksdi/ckanext-sdi.git
 ENV SDI_GIT_BRANCH=master
-ENV OAIPMH_GIT_URL=https://github.com/apteksdi/ckanext-oaipmh.git
-ENV OAIPMH_GIT_BRANCH=master
 
 # Switch to the root user
 USER root
@@ -33,7 +31,6 @@ RUN apt-get update
 
 # Install necessary packages to build extensions
 RUN apt-get install --no-install-recommends -y \
-	xmlsec1 \
     gcc \
     g++ \
     libffi-dev \
@@ -44,12 +41,13 @@ RUN apt-get install --no-install-recommends -y \
     libgeos-dev \
     libc6-dev \
     musl-dev \
-    python3-setuptools  
+    xmlsec1 \
+    python3-setuptools   
 
 # Fetch and build the custom CKAN extensions
 RUN pip wheel --wheel-dir=/wheels git+${HARVEST_GIT_URL}@${HARVEST_GIT_BRANCH}#egg=ckanext-harvest
-RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-harvest/${HARVEST_GIT_BRANCH}/pip-requirements.txt
-RUN curl -o /wheels/harvest.txt https://raw.githubusercontent.com/ckan/ckanext-harvest/${HARVEST_GIT_BRANCH}/pip-requirements.txt
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt
+RUN curl -o /wheels/harvest.txt https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt
 
 RUN pip wheel --wheel-dir=/wheels git+${SPATIAL_GIT_URL}@${SPATIAL_GIT_BRANCH}#egg=ckanext-spatial
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-spatial/${SPATIAL_GIT_BRANCH}/requirements.txt
@@ -83,10 +81,6 @@ RUN pip wheel --wheel-dir=/wheels git+${SDI_GIT_URL}@${SDI_GIT_BRANCH}#egg=ckane
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-sdi/master/requirements.txt
 RUN curl -o /wheels/sdi.txt https://raw.githubusercontent.com/apteksdi/ckanext-sdi/master/requirements.txt
 
-RUN pip wheel --wheel-dir=/wheels git+${OAIPMH_GIT_URL}@${OAIPMH_GIT_BRANCH}#egg=ckanext-oaipmh
-RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-oaipmh/master/requirements.txt
-RUN curl -o /wheels/oaipmh.txt https://raw.githubusercontent.com/apteksdi/ckanext-oaipmh/master/requirements.txt
-
 USER ckan
 
 ############
@@ -97,7 +91,7 @@ FROM ghcr.io/apteksdi/ckan:2.9.5-focal
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
 #ENV CKAN_ROOT_PATH /data/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query datastore datapusher pages showcase scheming_datasets pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
+ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query datastore datapusher pages showcase scheming_datasets pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data
 ENV CKAN__AUTH__CREATE_USER_VIA_API false
 ENV CKAN__AUTH__CREATE_USER_VIA_web false
 ENV CKAN__AUTH__PUBLIC_USER_DETAILS false
@@ -121,7 +115,6 @@ COPY --from=extbuild /wheels /srv/app/ext_wheels
 RUN pip install auth && \
     pip install iso-639 \
     pip install first \
-    pip install pyOpenSSL \
     pip install pylons && \
     pip install actions && \
     pip install constants && \
@@ -146,8 +139,6 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/scheming.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-dcat && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/dcat.txt && \
-    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-oaipmh && \
-    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/oaipmh.txt && \
     # Configure plugins
     #ckan config-tool "${APP_DIR}/production.ini" "ckan.root_path = ${CKAN_ROOT_PATH}" && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
