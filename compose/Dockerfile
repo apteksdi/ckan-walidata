@@ -22,6 +22,10 @@ ENV SCHEMING_GIT_URL=https://github.com/apteksdi/ckanext-scheming.git
 ENV SCHEMING_GIT_BRANCH=master
 ENV SDI_GIT_URL=https://github.com/apteksdi/ckanext-sdi.git
 ENV SDI_GIT_BRANCH=master
+ENV RESOURCEAUTHORIZER_GIT_URL=https://github.com/apteksdi/ckanext-resourceauthorizer-2.git
+ENV RESOURCEAUTHORIZER_GIT_BRANCH=master
+ENV SYNDICATE_GIT_URL=https://github.com/DataShades/ckanext-syndicate.git
+ENV SYNDICATE_GIT_BRANCH=master
 
 # Switch to the root user
 USER root
@@ -81,6 +85,14 @@ RUN pip wheel --wheel-dir=/wheels git+${SDI_GIT_URL}@${SDI_GIT_BRANCH}#egg=ckane
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-sdi/master/requirements.txt
 RUN curl -o /wheels/sdi.txt https://raw.githubusercontent.com/apteksdi/ckanext-sdi/master/requirements.txt
 
+RUN pip wheel --wheel-dir=/wheels git+${RESOURCEAUTHORIZER_GIT_URL}@${RESOURCEAUTHORIZER_GIT_BRANCH}#egg=ckanext-resourceauthorizer
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-resourceauthorizer-2/master/requirements.txt
+RUN curl -o /wheels/resourceauthorizer.txt https://raw.githubusercontent.com/apteksdi/ckanext-resourceauthorizer-2/master/requirements.txt
+
+RUN pip wheel --wheel-dir=/wheels git+${SYNDICATE_GIT_URL}@${SYNDICATE_GIT_BRANCH}#egg=ckanext-syndicate
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/DataShades/ckanext-syndicate/master/requirements.txt
+RUN curl -o /wheels/syndicate.txt https://raw.githubusercontent.com/DataShades/ckanext-syndicate/master/requirements.txt
+
 USER ckan
 
 ############
@@ -139,6 +151,10 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/scheming.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-dcat && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/dcat.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-resourceauthorizer && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/resourceauthorizer.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-syndicate && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/syndicate.txt && \
     # Configure plugins
     #ckan config-tool "${APP_DIR}/production.ini" "ckan.root_path = ${CKAN_ROOT_PATH}" && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
