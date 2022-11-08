@@ -20,10 +20,20 @@ ENV DCAT_GIT_URL=https://github.com/apteksdi/ckanext-dcat.git
 ENV DCAT_GIT_BRANCH=master
 ENV SCHEMING_GIT_URL=https://github.com/apteksdi/ckanext-scheming.git
 ENV SCHEMING_GIT_BRANCH=master
-ENV SDI_GIT_URL=https://github.com/apteksdi/ckanext-sdi.git
-ENV SDI_GIT_BRANCH=master
+ENV TYPEDPACKAGE_GIT_URL=https://github.com/apteksdi/ckanext-create_typed_package.git
+ENV TYPEDPACKAGE_GIT_BRANCH=master
+ENV RESOURCEDICTIONARY_GIT_URL=https://github.com/keitaroinc/ckanext-resourcedictionary.git
+ENV RESOURCEDICTIONARY_GIT_BRANCH=main
+ENV SDBI_GIT_URL=https://github.com/apteksdi/ckanext-sdbi.git
+ENV SDBI_GIT_BRANCH=master
+ENV OAIPMH_GIT_URL=https://github.com/apteksdi/ckanext-oaipmh.git
+ENV OAIPMH_GIT_BRANCH=master
 ENV RESOURCEAUTHORIZER_GIT_URL=https://github.com/apteksdi/ckanext-resourceauthorizer-2.git
 ENV RESOURCEAUTHORIZER_GIT_BRANCH=master
+ENV NOANONACCESS_GIT_URL=https://github.com/saiafarm/ckanext-noanonaccess.git
+ENV NOANONACCESS_GIT_BRANCH=master
+ENV ISSUES_GIT_URL=https://github.com/apteksdi/ckanext-issues.git
+ENV ISSUES_GIT_BRANCH=master
 ENV SYNDICATE_GIT_URL=https://github.com/DataShades/ckanext-syndicate.git
 ENV SYNDICATE_GIT_BRANCH=master
 
@@ -35,6 +45,7 @@ RUN apt-get update
 
 # Install necessary packages to build extensions
 RUN apt-get install --no-install-recommends -y \
+	xmlsec1 \
     gcc \
     g++ \
     libffi-dev \
@@ -45,8 +56,8 @@ RUN apt-get install --no-install-recommends -y \
     libgeos-dev \
     libc6-dev \
     musl-dev \
-    xmlsec1 \
-    python3-setuptools   
+    python3-setuptools \
+    libgdal-dev  
 
 # Fetch and build the custom CKAN extensions
 RUN pip wheel --wheel-dir=/wheels git+${HARVEST_GIT_URL}@${HARVEST_GIT_BRANCH}#egg=ckanext-harvest
@@ -81,13 +92,33 @@ RUN pip wheel --wheel-dir=/wheels git+${SCHEMING_GIT_URL}@${SCHEMING_GIT_BRANCH}
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-scheming/master/requirements.txt
 RUN curl -o /wheels/scheming.txt https://raw.githubusercontent.com/apteksdi/ckanext-scheming/master/requirements.txt
 
-RUN pip wheel --wheel-dir=/wheels git+${SDI_GIT_URL}@${SDI_GIT_BRANCH}#egg=ckanext-sdi
-RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-sdi/master/requirements.txt
-RUN curl -o /wheels/sdi.txt https://raw.githubusercontent.com/apteksdi/ckanext-sdi/master/requirements.txt
+RUN pip wheel --wheel-dir=/wheels git+${TYPEDPACKAGE_GIT_URL}@${TYPEDPACKAGE_GIT_BRANCH}#egg=ckanext-create_typed_package
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-create_typed_package/master/requirements.txt
+RUN curl -o /wheels/typedpackage.txt https://raw.githubusercontent.com/apteksdi/ckanext-create_typed_package/master/requirements.txt
+
+RUN pip wheel --wheel-dir=/wheels git+${RESOURCEDICTIONARY_GIT_URL}@${RESOURCEDICTIONARY_GIT_BRANCH}#egg=ckanext-resourcedictionary
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/keitaroinc/ckanext-resourcedictionary/main/requirements.txt
+RUN curl -o /wheels/resourcedictionary.txt https://raw.githubusercontent.com/keitaroinc/ckanext-resourcedictionary/main/requirements.txt
+
+RUN pip wheel --wheel-dir=/wheels git+${SDBI_GIT_URL}@${SDBI_GIT_BRANCH}#egg=ckanext-sdbi
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-sdbi/master/requirements.txt
+RUN curl -o /wheels/sdbi.txt https://raw.githubusercontent.com/apteksdi/ckanext-sdbi/master/requirements.txt
+
+RUN pip wheel --wheel-dir=/wheels git+${OAIPMH_GIT_URL}@${OAIPMH_GIT_BRANCH}#egg=ckanext-oaipmh
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-oaipmh/master/requirements.txt
+RUN curl -o /wheels/oaipmh.txt https://raw.githubusercontent.com/apteksdi/ckanext-oaipmh/master/requirements.txt
 
 RUN pip wheel --wheel-dir=/wheels git+${RESOURCEAUTHORIZER_GIT_URL}@${RESOURCEAUTHORIZER_GIT_BRANCH}#egg=ckanext-resourceauthorizer
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-resourceauthorizer-2/master/requirements.txt
 RUN curl -o /wheels/resourceauthorizer.txt https://raw.githubusercontent.com/apteksdi/ckanext-resourceauthorizer-2/master/requirements.txt
+
+RUN pip wheel --wheel-dir=/wheels git+${NOANONACCESS_GIT_URL}@${NOANONACCESS_GIT_BRANCH}#egg=ckanext-noanonaccess
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/saiafarm/ckanext-noanonaccess/master/requirements.txt
+RUN curl -o /wheels/noanonaccess.txt https://raw.githubusercontent.com/saiafarm/ckanext-noanonaccess/master/requirements.txt
+
+RUN pip wheel --wheel-dir=/wheels git+${ISSUES_GIT_URL}@${ISSUES_GIT_BRANCH}#egg=ckanext-issues
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-issues/master/requirements.txt
+RUN curl -o /wheels/issues.txt https://raw.githubusercontent.com/apteksdi/ckanext-issues/master/requirements.txt
 
 RUN pip wheel --wheel-dir=/wheels git+${SYNDICATE_GIT_URL}@${SYNDICATE_GIT_BRANCH}#egg=ckanext-syndicate
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/DataShades/ckanext-syndicate/master/requirements.txt
@@ -103,20 +134,22 @@ FROM ghcr.io/apteksdi/ckan:2.9.5-focal
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
 #ENV CKAN_ROOT_PATH /data/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query datastore datapusher pages showcase scheming_datasets pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data
+ENV CKAN__PLUGINS envvars stats image_view text_view recline_view scheming_datasets resourceauthorizer resource_proxy geo_view sdbi harvest ckan_harvester csw_harvester spatial_metadata spatial_query create_typed_package resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
 ENV CKAN__AUTH__CREATE_USER_VIA_API false
-ENV CKAN__AUTH__CREATE_USER_VIA_web false
+ENV CKAN__AUTH__CREATE_USER_VIA_web true
 ENV CKAN__AUTH__PUBLIC_USER_DETAILS false
 ENV CKAN__AUTH__PUBLIC_ACTIVITY_STREAM_DETAIL false
 ENV CKANEXT__SPATIAL__SEARCH_BACKEND solr
 ENV CKANEXT__SPATIAL__HARVEST__CONTINUE_ON_VALIDATION_ERRORS true
-ENV CKANEXT__SPATIAL__COMMON_MAP__TYPE custom
-ENV CKANEXT__SPATIAL__COMMON_MAP__CUSTOM__URL https://geoservices.big.go.id/rbi/rest/services/BASEMAP/Rupabumi_Indonesia/MapServer/WMTS/tile/1.0.0/BASEMAP_Rupabumi_Indonesia/default/default028mm/{z}/{y}/{x}.png
-ENV CKANEXT__SPATIAL__COMMON_MAP__ATTRIBUTION Map tiles by <a href="https://www.big.go.id">Badan Informasi Geospasial</a>.
+#ENV CKANEXT__SPATIAL__COMMON_MAP__TYPE custom
+#ENV CKANEXT__SPATIAL__COMMON_MAP__CUSTOM__URL http://tile.stamen.com/terrain/{Z}/{X}/{Y}.png
+#ENV CKANEXT__SPATIAL__COMMON_MAP__ATTRIBUTION Map tiles by <a href="https://www.big.go.id">Badan Informasi Geospasial</a>.
 ENV CKANEXT__GEOVIEW__OL_VIEWER__FORMATS wms wfs geojson gml kml arcgis_rest gft
 ENV CKANEXT__PAGES__ALLOW_HTML True
 ENV CKANEXT__PAGES__EDITOR ckeditor
 ENV CKANEXT__SHOWCASE__EDITOR ckeditor
+ENV SCHEMING__DATASET_SCHEMAS ckanext.scheming:camel_photos.yaml
+ENV SCHEMING__PRESETS ckanext.scheming:presets.json
 
 # Switch to the root user
 USER root
@@ -133,6 +166,7 @@ RUN pip install auth && \
     pip install helpers && \
     pip install ckanext-pdfview && \
     pip install ckanext-datarequests && \
+    pip install -e git+https://github.com/datagovau/ckanext-agls#egg=ckanext-agls && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-harvest && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/harvest.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-spatial && \
@@ -145,14 +179,24 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/showcase.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-officedocs && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/officedocs.txt && \
-    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-sdi && \
-    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/sdi.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-sdbi && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/sdbi.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-scheming && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/scheming.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-create_typed_package && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/typedpackage.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-resourcedictionary && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/resourcedictionary.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-dcat && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/dcat.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-oaipmh && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/oaipmh.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-resourceauthorizer && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/resourceauthorizer.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-noanonaccess && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/noanonaccess.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-issues && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/issues.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-syndicate && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/syndicate.txt && \
     # Configure plugins
@@ -167,6 +211,8 @@ RUN pip install auth && \
     ckan config-tool "${APP_DIR}/production.ini" "ckanext.pages.allow_html = ${CKANEXT__PAGES__ALLOW_HTML}" && \
     ckan config-tool "${APP_DIR}/production.ini" "ckanext.pages.editor = ${CKANEXT__PAGES__EDITOR}" && \
     ckan config-tool "${APP_DIR}/production.ini" "ckanext.showcase.editor = ${CKANEXT__SHOWCASE__EDITOR}" && \
+    ckan config-tool "${APP_DIR}/production.ini" "scheming.dataset_schemas = ${SCHEMING__DATASET_SCHEMAS}" && \
+    ckan config-tool "${APP_DIR}/production.ini" "scheming.presets = ${SCHEMING__PRESETS}" && \
     chown -R ckan:ckan /srv/app
 
 # Remove wheels
