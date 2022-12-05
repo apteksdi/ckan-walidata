@@ -57,7 +57,8 @@ RUN apt-get install --no-install-recommends -y \
     libc6-dev \
     musl-dev \
     python3-setuptools \
-    libgdal-dev  
+    libgdal-dev \
+    libpq-dev
 
 # Fetch and build the custom CKAN extensions
 RUN pip wheel --wheel-dir=/wheels git+${HARVEST_GIT_URL}@${HARVEST_GIT_BRANCH}#egg=ckanext-harvest
@@ -166,6 +167,8 @@ RUN pip install auth && \
     pip install helpers && \
     pip install ckanext-pdfview && \
     pip install ckanext-datarequests && \
+    pip install flask_debugtoolbar && \
+    pip install psycopg2-binary && \
     pip install -e git+https://github.com/datagovau/ckanext-agls#egg=ckanext-agls && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-harvest && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/harvest.txt && \
