@@ -36,6 +36,8 @@ ENV ISSUES_GIT_URL=https://github.com/apteksdi/ckanext-issues.git
 ENV ISSUES_GIT_BRANCH=master
 ENV SYNDICATE_GIT_URL=https://github.com/DataShades/ckanext-syndicate.git
 ENV SYNDICATE_GIT_BRANCH=master
+ENV PDF_GIT_URL=https://github.com/apteksdi/ckanext-pdfview.git
+ENV PDF_GIT_BRANCH=master
 
 # Switch to the root user
 USER root
@@ -126,6 +128,10 @@ RUN pip wheel --wheel-dir=/wheels git+${SYNDICATE_GIT_URL}@${SYNDICATE_GIT_BRANC
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/DataShades/ckanext-syndicate/master/requirements.txt
 RUN curl -o /wheels/syndicate.txt https://raw.githubusercontent.com/DataShades/ckanext-syndicate/master/requirements.txt
 
+RUN pip wheel --wheel-dir=/wheels git+${PDF_GIT_URL}@${PDF_GIT_BRANCH}#egg=ckanext-pdfview
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-pdfview/master/requirements.txt
+RUN curl -o /wheels/pdfview.txt https://raw.githubusercontent.com/apteksdi/ckanext-pdfview/master/requirements.txt
+
 USER ckan
 
 ############
@@ -169,7 +175,6 @@ RUN pip install auth && \
     pip install urllib3 && \
     pip install pyopenssl cryptography --upgrade && \
     pip install -U cffi && \
-    pip install ckanext-pdfview && \
     pip install ckanext-datarequests && \
     pip install flask_debugtoolbar && \
     pip install psycopg2-binary && \
@@ -206,6 +211,8 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/issues.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-syndicate && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/syndicate.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-pdfview && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/pdfview.txt && \
     # Configure plugins
     #ckan config-tool "${APP_DIR}/production.ini" "ckan.root_path = ${CKAN_ROOT_PATH}" && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
