@@ -38,6 +38,8 @@ ENV SYNDICATE_GIT_URL=https://github.com/DataShades/ckanext-syndicate.git
 ENV SYNDICATE_GIT_BRANCH=master
 ENV PDF_GIT_URL=https://github.com/apteksdi/ckanext-pdfview.git
 ENV PDF_GIT_BRANCH=master
+ENV SECURITY_GIT_URL=https://github.com/data-govt-nz/ckanext-security.git
+ENV SECURITY_GIT_BRANCH=master
 
 # Switch to the root user
 USER root
@@ -132,6 +134,10 @@ RUN pip wheel --wheel-dir=/wheels git+${PDF_GIT_URL}@${PDF_GIT_BRANCH}#egg=ckane
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-pdfview/master/requirements.txt
 RUN curl -o /wheels/pdfview.txt https://raw.githubusercontent.com/apteksdi/ckanext-pdfview/master/requirements.txt
 
+RUN pip wheel --wheel-dir=/wheels git+${SECURITY_GIT_URL}@${SECURITY_GIT_BRANCH}#egg=ckanext-security
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/data-govt-nz/ckanext-security/master/requirements.txt
+RUN curl -o /wheels/security.txt https://raw.githubusercontent.com/data-govt-nz/ckanext-security/master/requirements.txt
+
 USER ckan
 
 ############
@@ -142,7 +148,7 @@ FROM ghcr.io/apteksdi/ckan:2.9.5-focal
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
 #ENV CKAN_ROOT_PATH /data/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view scheming_datasets resourceauthorizer resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
+ENV CKAN__PLUGINS envvars stats image_view text_view recline_view security scheming_datasets resourceauthorizer resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
 ENV CKAN__AUTH__CREATE_USER_VIA_API false
 ENV CKAN__AUTH__CREATE_USER_VIA_web false
 ENV CKAN__AUTH__PUBLIC_USER_DETAILS false
@@ -213,6 +219,8 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/syndicate.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-pdfview && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/pdfview.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-security && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/security.txt && \
     # Configure plugins
     #ckan config-tool "${APP_DIR}/production.ini" "ckan.root_path = ${CKAN_ROOT_PATH}" && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
