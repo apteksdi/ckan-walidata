@@ -60,3 +60,6 @@ CKAN__PAGES__EDITOR=ckeditor
 
 # Showcase
 CKAN__SHOWCASE__EDITOR=ckeditor
+
+#Security
+CKANEXT__SECURITY__UPLOAD_BLACKLIST=['.html', '.js', '.sql', '.php', 'text/html', 'text/javascript', 'application/sql', 'application/x-sql']
