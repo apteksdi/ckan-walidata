@@ -9,6 +9,8 @@ volumes:
 services:
   ckan:
     container_name: ckan
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     networks:
@@ -35,6 +37,8 @@ services:
 
   ckan-harvest-gather:
     container_name: ckan-harvest-gather
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     command: ckan -c /srv/app/production.ini harvester gather-consumer
@@ -60,6 +64,8 @@ services:
       
   ckan-harvest-fetch:
     container_name: ckan-harvest-fetch
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     command: ckan -c /srv/app/production.ini harvester fetch-consumer
@@ -85,6 +91,8 @@ services:
 
   ckan-harvest-run:
     container_name: ckan-harvest-run
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     command: /bin/sh -c "while true; do sleep 900; ckan -c /srv/app/production.ini harvester run; done"
@@ -109,6 +117,8 @@ services:
       
   ckan-harvest-cleanlog:
     container_name: ckan-harvest-cleanlog
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     command: /bin/sh -c "while true; do sleep 86400; ckan -c /srv/app/production.ini harvester clean_harvest_log; done"
