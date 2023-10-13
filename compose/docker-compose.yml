@@ -8,6 +8,8 @@ volumes:
 services:
   ckan:
     container_name: ckan
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     networks:
@@ -32,17 +34,19 @@ services:
 
   ckan-harvest-gather:
     container_name: ckan-harvest-gather
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
-    command: ckan -c /srv/app/production.ini harvester gather-consumer
-    restart: on-failure
+    command: /bin/sh -c "while true; do sleep 900; ckan -c /srv/app/production.ini harvester gather-consumer; done"
+    #restart: on-failure
     networks:
       - frontend
       - backend
     depends_on:
       - ckan
     env_file:
-      - ./.ckan-env
+      - ./.ckan-env-harvest
     environment:
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/ckan
       - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/datastore
@@ -53,20 +57,23 @@ services:
       - CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
       
   ckan-harvest-fetch:
     container_name: ckan-harvest-fetch
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
-    command: ckan -c /srv/app/production.ini harvester fetch-consumer
-    restart: on-failure
+    command: /bin/sh -c "while true; do sleep 86400; ckan -c /srv/app/production.ini harvester fetch-consumer; done"
+    #restart: on-failure
     networks:
       - frontend
       - backend
     depends_on:
       - ckan
     env_file:
-      - ./.ckan-env
+      - ./.ckan-env-harvest
     environment:
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/ckan
       - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/datastore
@@ -77,9 +84,12 @@ services:
       - CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
 
   ckan-harvest-run:
     container_name: ckan-harvest-run
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     command: /bin/sh -c "while true; do sleep 900; ckan -c /srv/app/production.ini harvester run; done"
@@ -89,7 +99,7 @@ services:
     depends_on:
       - ckan
     env_file:
-      - ./.ckan-env
+      - ./.ckan-env-harvest
     environment:
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/ckan
       - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/datastore
@@ -103,6 +113,8 @@ services:
       
   ckan-harvest-cleanlog:
     container_name: ckan-harvest-cleanlog
+    sysctls:
+      - net.core.somaxconn=1024
     build:
       context: .
     command: /bin/sh -c "while true; do sleep 86400; ckan -c /srv/app/production.ini harvester clean_harvest_log; done"
@@ -112,7 +124,7 @@ services:
     depends_on:
       - ckan
     env_file:
-      - ./.ckan-env
+      - ./.ckan-env-harvest
     environment:
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/ckan
       - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/datastore
