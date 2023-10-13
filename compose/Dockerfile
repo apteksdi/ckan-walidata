@@ -1,7 +1,7 @@
 ###################
 ### Extensions ####
 ###################
-FROM ghcr.io/apteksdi/ckan:2.9.5-focal as extbuild
+FROM ghcr.io/keitaroinc/ckan:2.9.9-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
@@ -143,7 +143,7 @@ USER ckan
 ############
 ### MAIN ###
 ############
-FROM ghcr.io/apteksdi/ckan:2.9.5-focal
+FROM ghcr.io/keitaroinc/ckan:2.9.9-focal
 
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
@@ -179,7 +179,7 @@ RUN pip install auth && \
     pip install constants && \
     pip install helpers && \
     pip install urllib3 && \
-    pip install pyopenssl cryptography --upgrade && \
+    pip install --force-reinstall cryptography==38.0.4 \
     pip install -U cffi && \
     pip install ckanext-datarequests && \
     pip install flask_debugtoolbar && \
