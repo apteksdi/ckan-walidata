@@ -46,7 +46,7 @@ services:
     depends_on:
       - ckan
     env_file:
-      - ./.ckan-env-harvest
+      - ./.ckan-env
     environment:
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/ckan
       - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/datastore
@@ -73,7 +73,7 @@ services:
     depends_on:
       - ckan
     env_file:
-      - ./.ckan-env-harvest
+      - ./.ckan-env
     environment:
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/ckan
       - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/datastore
@@ -99,7 +99,7 @@ services:
     depends_on:
       - ckan
     env_file:
-      - ./.ckan-env-harvest
+      - ./.ckan-env
     environment:
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/ckan
       - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/datastore
