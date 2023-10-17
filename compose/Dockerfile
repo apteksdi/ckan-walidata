@@ -5,7 +5,7 @@ FROM ghcr.io/keitaroinc/ckan:2.9.9-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
-ENV HARVEST_GIT_BRANCH=v1.3.4
+ENV HARVEST_GIT_BRANCH=v1.5.6
 ENV SPATIAL_GIT_URL=https://github.com/ckan/ckanext-spatial.git
 ENV SPATIAL_GIT_BRANCH=master
 ENV GEOVIEW_GIT_URL=https://github.com/ckan/ckanext-geoview.git
@@ -32,6 +32,10 @@ ENV RESOURCEAUTHORIZER_GIT_URL=https://github.com/apteksdi/ckanext-resourceautho
 ENV RESOURCEAUTHORIZER_GIT_BRANCH=master
 ENV NOANONACCESS_GIT_URL=https://github.com/saiafarm/ckanext-noanonaccess.git
 ENV NOANONACCESS_GIT_BRANCH=master
+ENV USERTRACKING_GIT_URL=https://github.com/SmdhMdep/ckanext-usertracking.git
+ENV USERTRACKING_GIT_BRANCH=main
+ENV ORGS_GIT_URL=https://github.com/USEPA/ckanext-collaborator_orgs.git
+ENV ORGS_GIT_BRANCH=master
 ENV ISSUES_GIT_URL=https://github.com/apteksdi/ckanext-issues.git
 ENV ISSUES_GIT_BRANCH=master
 ENV SYNDICATE_GIT_URL=https://github.com/DataShades/ckanext-syndicate.git
@@ -122,6 +126,14 @@ RUN pip wheel --wheel-dir=/wheels git+${NOANONACCESS_GIT_URL}@${NOANONACCESS_GIT
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/saiafarm/ckanext-noanonaccess/master/requirements.txt
 RUN curl -o /wheels/noanonaccess.txt https://raw.githubusercontent.com/saiafarm/ckanext-noanonaccess/master/requirements.txt
 
+RUN pip wheel --wheel-dir=/wheels git+${USERTRACKING_GIT_URL}@${USERTRACKING_GIT_BRANCH}#egg=ckanext-usertracking
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/SmdhMdep/ckanext-usertracking/main/requirements.txt
+RUN curl -o /wheels/usertracking.txt https://raw.githubusercontent.com/SmdhMdep/ckanext-usertracking/main/requirements.txt
+
+RUN pip wheel --wheel-dir=/wheels git+${ORGS_GIT_URL}@${ORGS_GIT_BRANCH}#egg=ckanext-collaborator_orgs
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/USEPA/ckanext-collaborator_orgs/master/requirements.txt
+RUN curl -o /wheels/orgs.txt https://raw.githubusercontent.com/USEPA/ckanext-collaborator_orgs/master/requirements.txt
+
 RUN pip wheel --wheel-dir=/wheels git+${ISSUES_GIT_URL}@${ISSUES_GIT_BRANCH}#egg=ckanext-issues
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/ckanext-issues/master/requirements.txt
 RUN curl -o /wheels/issues.txt https://raw.githubusercontent.com/apteksdi/ckanext-issues/master/requirements.txt
@@ -148,7 +160,7 @@ FROM ghcr.io/keitaroinc/ckan:2.9.9-focal
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
 #ENV CKAN_ROOT_PATH /data/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view security scheming_datasets resourceauthorizer resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
+ENV CKAN__PLUGINS envvars stats image_view text_view recline_view security usertracking scheming_datasets resourceauthorizer collaborator_orgs resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
 ENV CKAN__AUTH__CREATE_USER_VIA_API false
 ENV CKAN__AUTH__CREATE_USER_VIA_web false
 ENV CKAN__AUTH__PUBLIC_USER_DETAILS false
@@ -214,6 +226,10 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/resourceauthorizer.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-noanonaccess && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/noanonaccess.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-usertracking && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/usertracking.txt && \
+    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-collaborator_orgs && \
+    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/orgs.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-issues && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/issues.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-syndicate && \
