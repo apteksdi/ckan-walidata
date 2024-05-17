@@ -1,7 +1,7 @@
 ###################
 ### Extensions ####
 ###################
-FROM ghcr.io/keitaroinc/ckan:2.9.9-focal as extbuild
+FROM ghcr.io/keitaroinc/ckan:2.9.11-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
@@ -38,7 +38,7 @@ ENV SYNDICATE_GIT_URL=https://github.com/DataShades/ckanext-syndicate.git
 ENV SYNDICATE_GIT_BRANCH=master
 ENV PDF_GIT_URL=https://github.com/apteksdi/ckanext-pdfview.git
 ENV PDF_GIT_BRANCH=master
-ENV SECURITY_GIT_URL=https://github.com/data-govt-nz/ckanext-security.git
+ENV SECURITY_GIT_URL=https://github.com/apteksdi/ckanext-security.git
 ENV SECURITY_GIT_BRANCH=master
 
 # Switch to the root user
@@ -143,7 +143,7 @@ USER ckan
 ############
 ### MAIN ###
 ############
-FROM ghcr.io/keitaroinc/ckan:2.9.9-focal
+FROM ghcr.io/keitaroinc/ckan:2.9.11-focal
 
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
