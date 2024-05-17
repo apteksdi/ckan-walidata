@@ -1,7 +1,7 @@
 ###################
 ### Extensions ####
 ###################
-FROM ghcr.io/keitaroinc/ckan:2.9.9-focal as extbuild
+FROM ghcr.io/keitaroinc/ckan:2.9.11-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
@@ -42,7 +42,7 @@ ENV SYNDICATE_GIT_URL=https://github.com/DataShades/ckanext-syndicate.git
 ENV SYNDICATE_GIT_BRANCH=master
 ENV PDF_GIT_URL=https://github.com/apteksdi/ckanext-pdfview.git
 ENV PDF_GIT_BRANCH=master
-ENV SECURITY_GIT_URL=https://github.com/data-govt-nz/ckanext-security.git
+ENV SECURITY_GIT_URL=https://github.com/apteksdi/ckanext-security.git
 ENV SECURITY_GIT_BRANCH=master
 
 # Switch to the root user
@@ -155,12 +155,12 @@ USER ckan
 ############
 ### MAIN ###
 ############
-FROM ghcr.io/keitaroinc/ckan:2.9.9-focal
+FROM ghcr.io/keitaroinc/ckan:2.9.11-focal
 
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
 #ENV CKAN_ROOT_PATH /data/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view security usertracking scheming_datasets resourceauthorizer collaborator_orgs resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
+ENV CKAN__PLUGINS envvars stats image_view text_view recline_view usertracking scheming_datasets resourceauthorizer collaborator_orgs resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
 ENV CKAN__AUTH__CREATE_USER_VIA_API false
 ENV CKAN__AUTH__CREATE_USER_VIA_web false
 ENV CKAN__AUTH__PUBLIC_USER_DETAILS false
