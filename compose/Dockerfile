@@ -5,9 +5,9 @@ FROM ghcr.io/keitaroinc/ckan:2.9.11-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
-ENV HARVEST_GIT_BRANCH=v1.3.4
+ENV HARVEST_GIT_BRANCH=v1.5.6
 ENV SPATIAL_GIT_URL=https://github.com/ckan/ckanext-spatial.git
-ENV SPATIAL_GIT_BRANCH=master
+ENV SPATIAL_GIT_BRANCH=v1.1.0
 ENV GEOVIEW_GIT_URL=https://github.com/ckan/ckanext-geoview.git
 ENV GEOVIEW_GIT_BRANCH=v0.0.18
 ENV PAGES_GIT_URL=https://github.com/ckan/ckanext-pages.git
@@ -71,8 +71,8 @@ RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/apteksdi/
 RUN curl -o /wheels/harvest.txt https://raw.githubusercontent.com/apteksdi/ckanext-harvest/master/requirements.txt
 
 RUN pip wheel --wheel-dir=/wheels git+${SPATIAL_GIT_URL}@${SPATIAL_GIT_BRANCH}#egg=ckanext-spatial
-RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-spatial/${SPATIAL_GIT_BRANCH}/requirements.txt
-RUN curl -o /wheels/spatial.txt https://raw.githubusercontent.com/ckan/ckanext-spatial/${SPATIAL_GIT_BRANCH}/requirements.txt
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-spatial/v1.1.0/requirements.txt
+RUN curl -o /wheels/spatial.txt https://raw.githubusercontent.com/ckan/ckanext-spatial/v1.1.0/requirements.txt
 
 RUN pip wheel --wheel-dir=/wheels git+${GEOVIEW_GIT_URL}@${GEOVIEW_GIT_BRANCH}#egg=ckanext-geoview
 RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-geoview/${GEOVIEW_GIT_BRANCH}/pip-requirements.txt
