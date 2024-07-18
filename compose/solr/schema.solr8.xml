@@ -106,10 +106,10 @@ attribute with the form `ckan-X.Y` -->
     <field name="maxy" type="float" indexed="true" stored="true" />
     <field name="minx" type="float" indexed="true" stored="true" />
     <field name="miny" type="float" indexed="true" stored="true" />
-    <field name="prioritas_tahun" type="string" indexed="true" stored="true" multiValued="true"/>
-    <field name="kategori_spbe" type="string" indexed="true" stored="true" multiValued="true"/>
-    <field name="department_type" type="string" indexed="true" stored="true" multiValued="true"/>
-    <field name="publisher_type" type="string" indexed="true" stored="true" multiValued="true"/>
+    <field name="prioritas_tahun" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="kategori_spbe" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="department_type" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="publisher_type" type="string" indexed="true" stored="true" multiValued="true" />
  
  
     <field name="index_id" type="string" indexed="true" stored="true" required="true" />
