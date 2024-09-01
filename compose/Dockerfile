@@ -200,8 +200,6 @@ RUN pip install auth && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/geoview.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-officedocs && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/officedocs.txt && \
-    pip install --no-index --find-links=/srv/app/ext_wheels ckanext-sdi && \
-    pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/sdi.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-create_typed_package && \
     pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/typedpackage.txt && \
     pip install --no-index --find-links=/srv/app/ext_wheels ckanext-resourcedictionary && \
