@@ -18,7 +18,7 @@ CKAN__STORAGE_PATH=/srv/app/data
 CKAN__WEBASSETS__PATH=/srv/app/data/webassets
 # SYSADMIN settings, a sysadmin user is created automatically with the below credentials
 CKAN_SYSADMIN_NAME=admin
-CKAN_SYSADMIN_PASSWORD=somepassword12345678
+CKAN_SYSADMIN_PASSWORD=SomePassword12345678
 CKAN_SYSADMIN_EMAIL=sysadmind@example.com
 SECRET_KEY=u6FFxT2zYk1LbLrk3aaCs6x5l3JMgsUUqm2r80W7yuK
 
