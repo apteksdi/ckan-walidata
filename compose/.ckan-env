@@ -6,36 +6,35 @@
 MAINTENANCE_MODE=false
 
 # General Settings
+#CKAN_ROOT_PATH=/katalog/{{LANG}}/
 CKAN_SITE_ID=default
 CKAN_SITE_URL=http://localhost:5000
 CKAN_PORT=5000
-CKAN_MAX_UPLOAD_SIZE_MB=10
-SECRET_KEY=u6FFxT2zYk1LbLrk3aaCs6x5l3JMgsUUqm2r80W7tzI
-
+CKAN_MAX_UPLOAD_SIZE_MB=50
 # CKAN Plugins
-CKAN__PLUGINS=envvars stats image_view text_view recline_view scheming_datasets resourceauthorizer resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query resourcedictionary datastore datapusher pages showcase pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data oaipmh_harvester
-
+CKAN__PLUGINS=envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query scheming_organizations create_typed_package pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view resourcedictionary datastore datapusher pages showcase waf_harvester doc_harvester dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data
 # CKAN requires storage path to be set in order for filestore to be enabled
 CKAN__STORAGE_PATH=/srv/app/data
 CKAN__WEBASSETS__PATH=/srv/app/data/webassets
 # SYSADMIN settings, a sysadmin user is created automatically with the below credentials
 CKAN_SYSADMIN_NAME=admin
-CKAN_SYSADMIN_PASSWORD=somepassword
-CKAN_SYSADMIN_EMAIL=someemail@walidata.go.id
+CKAN_SYSADMIN_PASSWORD=somepassword12345678
+CKAN_SYSADMIN_EMAIL=sysadmind@example.com
+SECRET_KEY=u6FFxT2zYk1LbLrk3aaCs6x5l3JMgsUUqm2r80W7yuK
 
 # Email settings
-CKAN_SMTP_SERVER=smtp.corporateict.domain:25
+CKAN_SMTP_SERVER=smtp.example.com
 CKAN_SMTP_STARTTLS=True
-CKAN_SMTP_USER=user
-CKAN_SMTP_PASSWORD=pass
-CKAN_SMTP_MAIL_FROM=ckan@localhost
+CKAN_SMTP_USER=mail@example.com
+CKAN_SMTP_PASSWORD=somepasswordmail12345678
+CKAN_SMTP_MAIL_FROM=mail@example.com
 
 # Datapusher configuration
 CKAN__DATAPUSHER__URL=http://datapusher:8000
 CKAN__DATAPUSHER__CALLBACK_URL_BASE=http://ckan:5000/
 
 # Solr configuration
-CKAN_VERSION=2.9.4
+CKAN_VERSION=2.9.11
 CKAN_CORE_NAME=ckan
 
 # Harvest settings
@@ -52,16 +51,12 @@ CKAN__AUTH__PUBLIC_ACTIVITY_STREAM_DETAIL=False
 CKANEXT__SPATIAL__SEARCH_BACKEND=solr-bbox
 CKANEXT__SPATIAL__HARVEST__CONTINUE_ON_VALIDATION_ERRORS=true
 CKANEXT__SPATIAL__COMMON_MAP__TYPE=custom
-CKANEXT__SPATIAL__COMMON_MAP__CUSTOM__URL=https://geoservices.big.go.id/rbi/rest/services/BASEMAP/Rupabumi_Indonesia/MapServer/WMTS/tile/1.0.0/BASEMAP_Rupabumi_Indonesia/default/default028mm/{z}/{y}/{x}.png
-CKANEXT__SPATIAL__COMMON_MAP__ATTRIBUTION=Map tiles by <a href="https://www.big.go.id">Badan Informasi Geospasial</a>.
+CKANEXT__SPATIAL__COMMON_MAP__CUSTOM__URL=http://a.tile.openstreetmap.org/{z}/{x}/{y}.png
+CKANEXT__SPATIAL__COMMON_MAP__ATTRIBUTION=Map tiles by <a href="http://openstreetmap.org">OpenStreetMap</a> (<a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>).
 CKANEXT__GEOVIEW__OL_VIEWER__FORMATS=wms wfs geojson gml kml arcgis_rest gft
-
-# Pages
-CKAN__PAGES__ALLOW_HTML=True
-CKAN__PAGES__EDITOR=ckeditor
-
-# Showcase
-CKAN__SHOWCASE__EDITOR=ckeditor
+CKANEXT__GEOVIEW__GEOJSON__MAX_FILE_SIZE=100000000
+CKANEXT__GEOVIEW__SHP_VIEWER__SRID=4326
+CKANEXT__GEOVIEW__SHP_VIEWER__ENCODING=UTF-8
 
 #Security
-CKANEXT__SECURITY__UPLOAD_BLACKLIST=['.html', '.js', '.sql', '.php', 'text/html', 'text/javascript', 'application/sql', 'application/x-sql']
+CKANEXT__SECURITY__UPLOAD_BLACKLIST=['.pdf', '.doc', '.docx', '.png', 'image/jpg', '.html', '.js', '.sql', '.php', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/png', 'image/jpeg', 'text/html', 'text/javascript', 'application/sql', 'application/x-sql']
