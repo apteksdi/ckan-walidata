@@ -1,7 +1,7 @@
 ###################
 ### Extensions ####
 ###################
-FROM ghcr.io/apteksdi/ckan:2.9.11-focal as extbuild
+FROM ghcr.io/keitaroinc/ckan:2.9.11-focal as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HARVEST_GIT_URL=https://github.com/ckan/ckanext-harvest
@@ -143,9 +143,9 @@ USER ckan
 ############
 ### MAIN ###
 ############
-FROM ghcr.io/apteksdi/ckan:2.9.11-focal
+FROM ghcr.io/keitaroinc/ckan:2.9.11
 
-LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
+LABEL maintainer="Keitaro Inc <info@keitaro.com>"
 
 #ENV CKAN_ROOT_PATH /katalog/{{LANG}}/
 ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view resourcedictionary datastore datapusher waf_harvester doc_harvester dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data
