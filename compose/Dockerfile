@@ -148,7 +148,7 @@ FROM ghcr.io/apteksdi/ckan:2.9.11-focal
 LABEL maintainer="Imam Arif Rahman <imam.rahman@support.bappenas.go.id>"
 
 #ENV CKAN_ROOT_PATH /katalog/{{LANG}}/
-ENV CKAN__PLUGINS envvars stats image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view resourcedictionary datastore datapusher waf_harvester doc_harvester dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data
+ENV CKAN__PLUGINS envvars stats security image_view text_view recline_view resource_proxy geo_view harvest ckan_harvester csw_harvester spatial_metadata spatial_query pdf_view officedocs_view geojson_view shp_view wmts_view datatables_view resourcedictionary datastore datapusher waf_harvester doc_harvester dcat dcat_rdf_harvester dcat_json_harvester dcat_json_interface structured_data
 ENV CKAN__AUTH__CREATE_USER_VIA_API false
 ENV CKAN__AUTH__CREATE_USER_VIA_web false
 ENV CKAN__AUTH__PUBLIC_USER_DETAILS false
